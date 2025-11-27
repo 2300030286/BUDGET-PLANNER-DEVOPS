@@ -1,35 +1,42 @@
 services:
-  mysqldb:
-    container_name: mysql-db
+  mysql-service:
     image: mysql:8
+    container_name: mysql-db
     environment:
-      MYSQL_ROOT_PASSWORD: 1234
+      MYSQL_ROOT_PASSWORD: root
       MYSQL_DATABASE: budgetplanner
     ports:
       - "3307:3306"
     volumes:
-      - mysql-data:/var/lib/mysql
+      - mysql_data:/var/lib/mysql
+    networks:
+      - springboot-mysql-net
 
-  backend: 
+  backend:
+    image: 2300030286/budgetplanner-backend:latest
     container_name: springboot
-    build:
-      context: ./BudgetPlanner
-      dockerfile: ../BudgetPlanner/backend.Dockerfile
     ports:
-      - "2025:1430"
+    
+      - "30025:2000"
     depends_on:
-      - mysqldb
+      - mysql-service
     restart: on-failure
+    networks:
+      - springboot-mysql-net
 
   frontend:
+    image: 2300030286/budgetplanner-frontend:latest
     container_name: react
-    build:
-      context: ./BudgetPlanner-fr
-      dockerfile: ../BudgetPlanner-fr/frontend.Dockerfile
     ports:
-      - "3000:80"
+      - "30080:80"
     depends_on:
       - backend
+    restart: on-failure
+    networks:
+      - springboot-mysql-net
 
 volumes:
-  mysql-data:
+  mysql_data:
+
+networks:
+  springboot-mysql-net:
