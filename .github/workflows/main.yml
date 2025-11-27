@@ -30,7 +30,7 @@ jobs:
         uses: docker/build-push-action@v6
         with:
           context: ./BudgetPlanner
-          file: ./frontend.Dockerfile
+          file: ./backend.Dockerfile
           push: true
           tags: ${{ secrets.DOCKER_USERNAME }}/budgetplanner-backend:latest
 
@@ -39,6 +39,6 @@ jobs:
         uses: docker/build-push-action@v6
         with:
           context: ./BudgetPlanner-fr
-          file: ./backend.Dockerfile
+          file: ./frontend.Dockerfile
           push: true
           tags: ${{ secrets.DOCKER_USERNAME }}/budgetplanner-frontend:latest
